@@ -172,33 +172,29 @@ export const DeploymentForm = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // TODO: Replace this URL with your actual Google Apps Script deployment URL
       const GOOGLE_SCRIPT_URL =
         "https://script.google.com/macros/s/AKfycbz0V3zAmGiAv8EKw-m-CSOqSwizfUUNiiQnMbcmATWflZ8daSiB0K70Ors_ARiqx9-9/exec";
 
-      if (
-        GOOGLE_SCRIPT_URL ===
-        "https://script.google.com/macros/s/AKfycbz0V3zAmGiAv8EKw-m-CSOqSwizfUUNiiQnMbcmATWflZ8daSiB0K70Ors_ARiqx9-9/exec"
-      ) {
-        // Development mode - simulate submission
-        console.log("Form data to be submitted:", submissionData);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } else {
-        // Production mode - submit to Google Apps Script
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(submissionData),
-        });
-      }
-
-      toast({
-        title: "Success!",
-        description: "Deployment report submitted successfully",
+      // Submit to Google Apps Script
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submissionData),
       });
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        const actionText = result.action === "updated" ? "updated" : "created";
+        toast({
+          title: `Success! Entry ${actionText}`,
+          description: `Submission ID: ${result.submissionId}`,
+        });
+      } else {
+        throw new Error(result.message || "Submission failed");
+      }
 
       // Reset form
       setFormData({
