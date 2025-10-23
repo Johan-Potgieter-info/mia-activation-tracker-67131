@@ -38,15 +38,21 @@ interface FormData {
   actions: string;
 }
 
-const teamMembers = [
-  "Johan Potgieter (JP)",
-  "Sethu Lucas (SL)",
-  "Stefan Schoof (SS)",
-];
+const teamMembers = ["Johan Potgieter (JP)", "Sethu Lucas (SL)", "Stefan Schoof (SS)"];
 
 const timeOptions = [
-  "07:00", "08:00", "09:00", "10:00", "11:00", "12:00",
-  "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
+  "07:00",
+  "08:00",
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
+  "18:00",
 ];
 
 export const DeploymentForm = () => {
@@ -96,29 +102,29 @@ export const DeploymentForm = () => {
   };
 
   const handleInputChange = (field: keyof FormData, value: string | number | string[] | CustomMetric) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
   const handleCustomMetricNameChange = (metricKey: keyof FormData, name: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [metricKey]: { ...(prev[metricKey] as CustomMetric), name }
+      [metricKey]: { ...(prev[metricKey] as CustomMetric), name },
     }));
   };
 
   const handleCustomMetricValueChange = (metricKey: keyof FormData, value: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [metricKey]: { ...(prev[metricKey] as CustomMetric), value }
+      [metricKey]: { ...(prev[metricKey] as CustomMetric), value },
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       toast({
         title: "Validation Error",
@@ -129,15 +135,15 @@ export const DeploymentForm = () => {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       // Prepare custom metrics - only include ones with names
       const customMetrics: Record<string, any> = {};
       [
-        { key: 'customMetric1', data: formData.customMetric1 },
-        { key: 'customMetric2', data: formData.customMetric2 },
-        { key: 'customMetric3', data: formData.customMetric3 },
-        { key: 'customMetric4', data: formData.customMetric4 },
+        { key: "customMetric1", data: formData.customMetric1 },
+        { key: "customMetric2", data: formData.customMetric2 },
+        { key: "customMetric3", data: formData.customMetric3 },
+        { key: "customMetric4", data: formData.customMetric4 },
       ].forEach(({ key, data }, index) => {
         if (data.name.trim()) {
           customMetrics[`customMetric${index + 1}Name`] = data.name;
@@ -167,12 +173,16 @@ export const DeploymentForm = () => {
       };
 
       // TODO: Replace this URL with your actual Google Apps Script deployment URL
-      const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
-      
-      if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbz0V3zAmGiAv8EKw-m-CSOqSwizfUUNiiQnMbcmATWflZ8daSiB0K70Ors_ARiqx9-9/exec";
+
+      if (
+        GOOGLE_SCRIPT_URL ===
+        "https://script.google.com/macros/s/AKfycbz0V3zAmGiAv8EKw-m-CSOqSwizfUUNiiQnMbcmATWflZ8daSiB0K70Ors_ARiqx9-9/exec"
+      ) {
         // Development mode - simulate submission
         console.log("Form data to be submitted:", submissionData);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         // Production mode - submit to Google Apps Script
         await fetch(GOOGLE_SCRIPT_URL, {
@@ -184,12 +194,12 @@ export const DeploymentForm = () => {
           body: JSON.stringify(submissionData),
         });
       }
-      
+
       toast({
         title: "Success!",
         description: "Deployment report submitted successfully",
       });
-      
+
       // Reset form
       setFormData({
         eventName: "",
@@ -229,9 +239,7 @@ export const DeploymentForm = () => {
       <div className="max-w-4xl mx-auto">
         <Card className="shadow-lg">
           <CardHeader className="bg-primary text-primary-foreground">
-            <CardTitle className="text-2xl font-bold">
-              Mia Healthcare – Demo Deployment
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold">Mia Healthcare – Demo Deployment</CardTitle>
           </CardHeader>
           <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -248,9 +256,7 @@ export const DeploymentForm = () => {
                       onChange={(e) => handleInputChange("eventName", e.target.value)}
                       className={errors.eventName ? "border-destructive" : ""}
                     />
-                    {errors.eventName && (
-                      <p className="text-sm text-destructive mt-1">{errors.eventName}</p>
-                    )}
+                    {errors.eventName && <p className="text-sm text-destructive mt-1">{errors.eventName}</p>}
                   </div>
 
                   <div>
@@ -263,9 +269,7 @@ export const DeploymentForm = () => {
                       onChange={(e) => handleInputChange("address", e.target.value)}
                       className={errors.address ? "border-destructive" : ""}
                     />
-                    {errors.address && (
-                      <p className="text-sm text-destructive mt-1">{errors.address}</p>
-                    )}
+                    {errors.address && <p className="text-sm text-destructive mt-1">{errors.address}</p>}
                   </div>
 
                   <div>
@@ -279,9 +283,7 @@ export const DeploymentForm = () => {
                       onChange={(e) => handleInputChange("contact", e.target.value)}
                       className={errors.contact ? "border-destructive" : ""}
                     />
-                    {errors.contact && (
-                      <p className="text-sm text-destructive mt-1">{errors.contact}</p>
-                    )}
+                    {errors.contact && <p className="text-sm text-destructive mt-1">{errors.contact}</p>}
                   </div>
 
                   <div>
@@ -300,9 +302,7 @@ export const DeploymentForm = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.lead && (
-                      <p className="text-sm text-destructive mt-1">{errors.lead}</p>
-                    )}
+                    {errors.lead && <p className="text-sm text-destructive mt-1">{errors.lead}</p>}
                   </div>
 
                   <div>
@@ -321,9 +321,7 @@ export const DeploymentForm = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.support && (
-                      <p className="text-sm text-destructive mt-1">{errors.support}</p>
-                    )}
+                    {errors.support && <p className="text-sm text-destructive mt-1">{errors.support}</p>}
                   </div>
 
                   <div>
@@ -342,9 +340,7 @@ export const DeploymentForm = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.officer && (
-                      <p className="text-sm text-destructive mt-1">{errors.officer}</p>
-                    )}
+                    {errors.officer && <p className="text-sm text-destructive mt-1">{errors.officer}</p>}
                   </div>
 
                   <div>
@@ -363,9 +359,7 @@ export const DeploymentForm = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.startTime && (
-                      <p className="text-sm text-destructive mt-1">{errors.startTime}</p>
-                    )}
+                    {errors.startTime && <p className="text-sm text-destructive mt-1">{errors.startTime}</p>}
                   </div>
 
                   <div>
@@ -384,9 +378,7 @@ export const DeploymentForm = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    {errors.endTime && (
-                      <p className="text-sm text-destructive mt-1">{errors.endTime}</p>
-                    )}
+                    {errors.endTime && <p className="text-sm text-destructive mt-1">{errors.endTime}</p>}
                   </div>
                 </div>
               </FormSection>
@@ -402,11 +394,9 @@ export const DeploymentForm = () => {
                   value={formData.bookings}
                   onChange={(value) => handleInputChange("bookings", value)}
                 />
-                
+
                 <div className="mt-6 pt-4 border-t border-border">
-                  <h3 className="text-sm font-semibold text-muted-foreground mb-4">
-                    Additional Metrics (Optional)
-                  </h3>
+                  <h3 className="text-sm font-semibold text-muted-foreground mb-4">Additional Metrics (Optional)</h3>
                   <CustomCounterInput
                     label="Custom Metric 1"
                     metricName={formData.customMetric1.name}
