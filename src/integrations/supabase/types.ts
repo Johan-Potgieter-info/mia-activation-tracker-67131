@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      deployments: {
+        Row: {
+          actions: string | null
+          address: string
+          bookings: number | null
+          contact: string
+          created_at: string
+          custom_metric_1_name: string | null
+          custom_metric_1_value: number | null
+          custom_metric_2_name: string | null
+          custom_metric_2_value: number | null
+          custom_metric_3_name: string | null
+          custom_metric_3_value: number | null
+          custom_metric_4_name: string | null
+          custom_metric_4_value: number | null
+          end_time: string | null
+          event_name: string
+          id: string
+          improve: string | null
+          lead: string
+          notes: string | null
+          officer: string
+          people_engaged: number | null
+          selected_equipment: Json | null
+          start_time: string
+          submission_id: string | null
+          success: string | null
+          support: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: string | null
+          address: string
+          bookings?: number | null
+          contact: string
+          created_at?: string
+          custom_metric_1_name?: string | null
+          custom_metric_1_value?: number | null
+          custom_metric_2_name?: string | null
+          custom_metric_2_value?: number | null
+          custom_metric_3_name?: string | null
+          custom_metric_3_value?: number | null
+          custom_metric_4_name?: string | null
+          custom_metric_4_value?: number | null
+          end_time?: string | null
+          event_name: string
+          id?: string
+          improve?: string | null
+          lead: string
+          notes?: string | null
+          officer: string
+          people_engaged?: number | null
+          selected_equipment?: Json | null
+          start_time: string
+          submission_id?: string | null
+          success?: string | null
+          support: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: string | null
+          address?: string
+          bookings?: number | null
+          contact?: string
+          created_at?: string
+          custom_metric_1_name?: string | null
+          custom_metric_1_value?: number | null
+          custom_metric_2_name?: string | null
+          custom_metric_2_value?: number | null
+          custom_metric_3_name?: string | null
+          custom_metric_3_value?: number | null
+          custom_metric_4_name?: string | null
+          custom_metric_4_value?: number | null
+          end_time?: string | null
+          event_name?: string
+          id?: string
+          improve?: string | null
+          lead?: string
+          notes?: string | null
+          officer?: string
+          people_engaged?: number | null
+          selected_equipment?: Json | null
+          start_time?: string
+          submission_id?: string | null
+          success?: string | null
+          support?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

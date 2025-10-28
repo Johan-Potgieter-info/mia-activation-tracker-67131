@@ -10,6 +10,7 @@ import { FormSection } from "@/components/FormSection";
 import { CounterInput } from "@/components/CounterInput";
 import { CustomCounterInput } from "@/components/CustomCounterInput";
 import { EquipmentChecklist } from "@/components/EquipmentChecklist";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CustomMetric {
   name: string;
@@ -187,11 +188,51 @@ export const DeploymentForm = () => {
       const result = await response.json();
 
       if (result.status === "success") {
-        const actionText = result.action === "updated" ? "updated" : "created";
-        toast({
-          title: `Success! Entry ${actionText}`,
-          description: `Submission ID: ${result.submissionId}`,
-        });
+        // Also save to Lovable Cloud backend
+        const { error: dbError } = await supabase
+          .from("deployments")
+          .insert({
+            submission_id: result.submissionId,
+            event_name: formData.eventName,
+            address: formData.address,
+            contact: formData.contact,
+            lead: formData.lead,
+            support: formData.support,
+            officer: formData.officer,
+            start_time: formData.startTime,
+            end_time: formData.endTime,
+            people_engaged: formData.peopleEngaged,
+            bookings: formData.bookings,
+            custom_metric_1_name: formData.customMetric1.name,
+            custom_metric_1_value: formData.customMetric1.value,
+            custom_metric_2_name: formData.customMetric2.name,
+            custom_metric_2_value: formData.customMetric2.value,
+            custom_metric_3_name: formData.customMetric3.name,
+            custom_metric_3_value: formData.customMetric3.value,
+            custom_metric_4_name: formData.customMetric4.name,
+            custom_metric_4_value: formData.customMetric4.value,
+            selected_equipment: formData.selectedEquipment,
+            notes: formData.notes,
+            success: formData.success,
+            improve: formData.improve,
+            actions: formData.actions,
+          });
+
+        if (dbError) {
+          console.error("Database save error:", dbError);
+          // Show warning but don't fail the submission since Google Sheets succeeded
+          toast({
+            title: "Partial Success",
+            description: `Entry ${result.action === "updated" ? "updated" : "created"} in Google Sheets (ID: ${result.submissionId}), but backend save failed.`,
+            variant: "destructive",
+          });
+        } else {
+          const actionText = result.action === "updated" ? "updated" : "created";
+          toast({
+            title: `Success! Entry ${actionText}`,
+            description: `Submission ID: ${result.submissionId}. Saved to both Google Sheets and backend.`,
+          });
+        }
       } else {
         throw new Error(result.message || "Submission failed");
       }
